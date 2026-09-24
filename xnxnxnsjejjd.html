@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
+
+<title>Endless Number Counter</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet">
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: "Roboto", sans-serif;
+}
+
+
+/* =====================================================
+   MAIN NUMBER SCREEN
+===================================================== */
+
+#screen {
+    position: fixed;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 20px;
+}
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+#number {
+    width: 100%;
+
+    font-family: "Roboto", sans-serif;
+
+    font-size: 180px;
+    font-weight: 300;
+
+    line-height: .9;
+
+    letter-spacing: -5px;
+
+    white-space: nowrap;
+    overflow: hidden;
+
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =====================================================
+   NUMBER WORD
+===================================================== */
+
+#word {
+    width: 100%;
+
+    margin-top: 24px;
+
+    font-family: "Roboto", sans-serif;
+
+    font-size: 72px;
+    font-weight: 500;
+
+    line-height: 1;
+
+    letter-spacing: 1px;
+
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+#status {
+    position: fixed;
+
+    top: 10px;
+    left: 0;
+    right: 0;
+
+    z-index: 20;
+
+    text-align: center;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    opacity: .55;
+}
+
+
+/* =====================================================
+   CONTROLS
+===================================================== */
+
+#controls {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 12px;
+
+    z-index: 30;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    padding: 8px;
+}
+
+
+button {
+    border: 0;
+    outline: 0;
+
+    border-radius: 999px;
+
+    padding: 11px 15px;
+
+    background: #fff;
+    color: #000;
+
+    font-family: "Roboto", sans-serif;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+button:active {
+    transform: scale(.96);
+}
+
+
+/* =====================================================
+   INFINITY GLITCH
+===================================================== */
+
+.infinity-mode #number {
+    text-shadow:
+        3px 0 #ff003c,
+        -3px 0 #00e5ff,
+        0 0 18px #fff;
+}
+
+
+.infinity-mode #word {
+    text-shadow:
+        2px 0 #ff003c,
+        -2px 0 #00e5ff;
+}
+
+
+/* =====================================================
+   INFINITY SHAKE
+===================================================== */
+
+.infinity-effect {
+    animation:
+        infinityShake
+        .08s
+        linear
+        infinite;
+}
+
+
+@keyframes infinityShake {
+
+    0% {
+        transform: translate(0, 0);
+    }
+
+    20% {
+        transform: translate(-7px, 3px);
+    }
+
+    40% {
+        transform: translate(6px, -4px);
+    }
+
+    60% {
+        transform: translate(-5px, -2px);
+    }
+
+    80% {
+        transform: translate(6px, 4px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    #number {
+        font-size: 120px;
+    }
+
+    #word {
+        font-size: 48px;
+    }
+
+}
+
+
+@media (max-width: 380px) {
+
+    #number {
+        font-size: 90px;
+    }
+
+    #word {
+        font-size: 36px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ===================================================
+     NUMBER SCREEN
+=================================================== -->
+
+<div id="screen">
+
+    <div id="number">0</div>
+
+    <div id="word">Zero</div>
+
+</div>
+
+
+<!-- ===================================================
+     STATUS
+=================================================== -->
+
+<div id="status">
+    0 • Zero • Frozen
+</div>
+
+
+<!-- ===================================================
+     CONTROLS
+=================================================== -->
+
+<div id="controls">
+
+    <button id="startButton">
+        Start
+    </button>
+
+    <button id="slowerButton">
+        − Slower
+    </button>
+
+    <button id="fasterButton">
+        + Faster
+    </button>
+
+    <button id="superFastButton">
+        ⚡ Super Fast
+    </button>
+
+    <button id="videoButton">
+        Record Video
+    </button>
+
+    <button id="stopButton">
+        Stop
+    </button>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const screen =
+    document.getElementById("screen");
+
+const numberElement =
+    document.getElementById("number");
+
+const wordElement =
+    document.getElementById("word");
+
+const statusElement =
+    document.getElementById("status");
+
+const startButton =
+    document.getElementById("startButton");
+
+const slowerButton =
+    document.getElementById("slowerButton");
+
+const fasterButton =
+    document.getElementById("fasterButton");
+
+const superFastButton =
+    document.getElementById("superFastButton");
+
+const videoButton =
+    document.getElementById("videoButton");
+
+const stopButton =
+    document.getElementById("stopButton");
+
+
+/* =====================================================
+   COUNTER STATE
+===================================================== */
+
+let current = 0n;
+
+let exponent = null;
+
+let started = false;
+
+let infinity = false;
+
+let timer = null;
+
+
+/* =====================================================
+   SPEED
+===================================================== */
+
+/*
+   Smaller = faster
+   Larger = slower
+
+   1 ms      = Extreme
+   10 ms     = Super Fast
+   30 ms     = Very Fast
+   100 ms    = Normal
+   500 ms    = Slow
+   1000 ms   = Very Slow
+   3000 ms   = Super Slow
+*/
+
+let speed = 100;
+
+const MIN_SPEED = 1;
+const MAX_SPEED = 3000;
+
+
+/* =====================================================
+   NUMBER WORDS
+===================================================== */
+
+const ones = [
+
+    "Zero",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen"
+
+];
+
+
+const tens = [
+
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety"
+
+];
+
+
+/* =====================================================
+   LARGE NUMBER NAMES
+===================================================== */
+
+const scales = [
+
+    "Thousand",
+    "Million",
+    "Billion",
+    "Trillion",
+    "Quadrillion",
+    "Quintillion",
+    "Sextillion",
+    "Septillion",
+    "Octillion",
+    "Nonillion",
+    "Decillion",
+    "Undecillion",
+    "Duodecillion",
+    "Tredecillion",
+    "Quattuordecillion",
+    "Quindecillion",
+    "Sexdecillion",
+    "Septendecillion",
+    "Octodecillion",
+    "Novemdecillion",
+    "Vigintillion",
+    "Unvigintillion",
+    "Duovigintillion",
+    "Tresvigintillion",
+    "Quattuorvigintillion",
+    "Quinvigintillion",
+    "Sexvigintillion",
+    "Septemvigintillion",
+    "Octovigintillion",
+    "Novemvigintillion",
+    "Trigintillion",
+    "Untrigintillion",
+    "Duotrigintillion",
+    "Trestrigintillion",
+    "Quadragintillion",
+    "Quinquagintillion",
+    "Sexagintillion",
+    "Septuagintillion",
+    "Octogintillion",
+    "Nonagintillion",
+    "Centillion"
+
+];
+
+
+/* =====================================================
+   0–999 → WORDS
+===================================================== */
+
+function underThousand(n) {
+
+    let result = "";
+
+
+    if (n >= 100) {
+
+        result =
+            ones[Math.floor(n / 100)] +
+            " Hundred";
+
+        n %= 100;
+
+
+        if (n > 0) {
+            result += " ";
+        }
+
+    }
+
+
+    if (n >= 20) {
+
+        result +=
+            tens[Math.floor(n / 10)];
+
+        n %= 10;
+
+
+        if (n > 0) {
+
+            result +=
+                " " +
+                ones[n];
+
+        }
+
+    }
+
+    else if (n > 0) {
+
+        result +=
+            ones[n];
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =====================================================
+   BIGINT → WORDS
+===================================================== */
+
+function bigNumberToWords(value) {
+
+    let n = BigInt(value);
+
+
+    if (n === 0n) {
+
+        return "Zero";
+
+    }
+
+
+    if (n < 1000n) {
+
+        return underThousand(
+            Number(n)
+        );
+
+    }
+
+
+    const groups = [];
+
+
+    while (n > 0n) {
+
+        groups.push(
+            Number(n % 1000n)
+        );
+
+        n /= 1000n;
+
+    }
+
+
+    const result = [];
+
+
+    for (
+        let i = groups.length - 1;
+        i >= 0;
+        i--
+    ) {
+
+        if (
+            groups[i] === 0
+        ) {
+            continue;
+        }
+
+
+        let part =
+            underThousand(
+                groups[i]
+            );
+
+
+        if (i > 0) {
+
+            let scale =
+                scales[i - 1];
+
+
+            if (!scale) {
+
+                scale =
+                    "10^" +
+                    (i * 3);
+
+            }
+
+
+            part +=
+                " " +
+                scale;
+
+        }
+
+
+        result.push(part);
+
+    }
+
+
+    return result.join(" ");
+
+}
+
+
+/* =====================================================
+   FORMAT BIGINT
+===================================================== */
+
+function formatBigInt(n) {
+
+    const text =
+        n.toString();
+
+
+    let first =
+        text.length % 3;
+
+
+    if (first === 0) {
+        first = 3;
+    }
+
+
+    let result =
+        text.slice(
+            0,
+            first
+        );
+
+
+    for (
+        let i = first;
+        i < text.length;
+        i += 3
+    ) {
+
+        result +=
+            "," +
+            text.slice(
+                i,
+                i + 3
+            );
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =====================================================
+   AUTO FIT
+===================================================== */
+
+function fitText(
+    element,
+    maximum,
+    minimum
+) {
+
+    let size = maximum;
+
+
+    element.style.fontSize =
+        size + "px";
+
+
+    while (
+
+        element.scrollWidth >
+        element.clientWidth &&
+
+        size > minimum
+
+    ) {
+
+        size--;
+
+
+        element.style.fontSize =
+            size + "px";
+
+    }
+
+}
+
+
+function fitScreen() {
+
+    fitText(
+        numberElement,
+        180,
+        18
+    );
+
+
+    fitText(
+        wordElement,
+        72,
+        12
+    );
+
+}
+
+
+/* =====================================================
+   DISPLAY
+===================================================== */
+
+function display(
+    number,
+    word
+) {
+
+    numberElement.textContent =
+        number;
+
+
+    wordElement.textContent =
+        word;
+
+
+    fitScreen();
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function updateStatus() {
+
+    if (infinity) {
+
+        statusElement.textContent =
+            "∞ • Infinity";
+
+        return;
+
+    }
+
+
+    if (!started) {
+
+        statusElement.textContent =
+            "0 • Zero • Frozen";
+
+        return;
+
+    }
+
+
+    let label;
+
+
+    if (speed <= 5) {
+
+        label = "Extreme";
+
+    }
+
+    else if (speed <= 15) {
+
+        label = "Super Fast";
+
+    }
+
+    else if (speed <= 50) {
+
+        label = "Very Fast";
+
+    }
+
+    else if (speed <= 150) {
+
+        label = "Normal";
+
+    }
+
+    else if (speed <= 500) {
+
+        label = "Slow";
+
+    }
+
+    else if (speed <= 1500) {
+
+        label = "Very Slow";
+
+    }
+
+    else {
+
+        label = "Super Slow";
+
+    }
+
+
+    statusElement.textContent =
+
+        "Speed: " +
+        label +
+        " • " +
+        speed +
+        "ms";
+
+}
+
+
+/* =====================================================
+   NEXT NUMBER
+===================================================== */
+
+function nextNumber() {
+
+    if (
+        !started ||
+        infinity
+    ) {
+        return;
+    }
+
+
+    /* ================================================
+       1 → 999
+    ================================================ */
+
+    if (
+        current < 1000n
+    ) {
+
+        current += 1n;
+
+
+        display(
+
+            formatBigInt(
+                current
+            ),
+
+            bigNumberToWords(
+                current
+            )
+
+        );
+
+
+        return;
+
+    }
+
+
+    /* ================================================
+       Thousand → Million
+    ================================================ */
+
+    if (
+        current < 1000000n
+    ) {
+
+        current *= 10n;
+
+
+        display(
+
+            formatBigInt(
+                current
+            ),
+
+            bigNumberToWords(
+                current
+            )
+
+        );
+
+
+        return;
+
+    }
+
+
+    /* ================================================
+       Million → Quintillion
+    ================================================ */
+
+    if (
+
+        current <
+        1000000000000000000n
+
+    ) {
+
+        current *= 1000n;
+
+
+        display(
+
+            formatBigInt(
+                current
+            ),
+
+            bigNumberToWords(
+                current
+            )
+
+        );
+
+
+        return;
+
+    }
+
+
+    /* ================================================
+       EXTENDED POWERS
+    ================================================ */
+
+    if (
+        exponent === null
+    ) {
+
+        exponent = 18;
+
+    }
+
+
+    exponent += 3;
+
+
+    /* ================================================
+       CENTILLION
+    ================================================ */
+
+    if (
+        exponent === 303
+    ) {
+
+        display(
+            "10^303",
+            "One Centillion"
+        );
+
+
+        return;
+
+    }
+
+
+    /* ================================================
+       EXTREMELY LARGE VALUES
+    ================================================ */
+
+    if (
+        exponent >= 1000000
+    ) {
+
+        startInfinity();
+
+        return;
+
+    }
+
+
+    const index =
+
+        Math.floor(
+            exponent / 3
+        ) - 1;
+
+
+    let name =
+        scales[index];
+
+
+    if (name) {
+
+        name =
+            "One " +
+            name;
+
+    }
+
+    else {
+
+        name =
+            "One 10^" +
+            exponent.toLocaleString();
+
+    }
+
+
+    display(
+
+        "10^" +
+        exponent.toLocaleString(),
+
+        name
+
+    );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+function startCounter() {
+
+    if (started) {
+        return;
+    }
+
+
+    started = true;
+
+
+    /*
+       ZERO IS FROZEN BEFORE START.
+
+       START BEGINS AT ONE.
+    */
+
+    current = 1n;
+
+
+    display(
+        "1",
+        "One"
+    );
+
+
+    updateStatus();
+
+
+    restartTimer();
+
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function restartTimer() {
+
+    if (timer !== null) {
+
+        clearInterval(
+            timer
+        );
+
+    }
+
+
+    if (
+        started &&
+        !infinity
+    ) {
+
+        timer =
+            setInterval(
+                nextNumber,
+                speed
+            );
+
+    }
+
+
+    updateStatus();
+
+}
+
+
+/* =====================================================
+   SLOWER
+===================================================== */
+
+function slower() {
+
+    speed =
+
+        Math.min(
+
+            MAX_SPEED,
+
+            Math.round(
+                speed * 1.5
+            )
+
+        );
+
+
+    restartTimer();
+
+}
+
+
+/* =====================================================
+   FASTER
+===================================================== */
+
+function faster() {
+
+    speed =
+
+        Math.max(
+
+            MIN_SPEED,
+
+            Math.round(
+                speed / 1.5
+            )
+
+        );
+
+
+    restartTimer();
+
+}
+
+
+/* =====================================================
+   SUPER FAST
+===================================================== */
+
+function superFast() {
+
+    speed = 1;
+
+    restartTimer();
+
+}
+
+
+/* =====================================================
+   INFINITY
+===================================================== */
+
+function startInfinity() {
+
+    infinity = true;
+
+
+    if (timer !== null) {
+
+        clearInterval(
+            timer
+        );
+
+        timer = null;
+
+    }
+
+
+    screen.classList.add(
+        "infinity-mode"
+    );
+
+
+    screen.classList.add(
+        "infinity-effect"
+    );
+
+
+    display(
+        "∞",
+        "Infinity"
+    );
+
+
+    updateStatus();
+
+}
+
+
+/* =====================================================
+   INITIAL STATE
+===================================================== */
+
+display(
+    "0",
+    "Zero"
+);
+
+updateStatus();
+
+
+/* =====================================================
+   BUTTON EVENTS
+===================================================== */
+
+startButton.addEventListener(
+    "click",
+    startCounter
+);
+
+
+slowerButton.addEventListener(
+    "click",
+    slower
+);
+
+
+fasterButton.addEventListener(
+    "click",
+    faster
+);
+
+
+superFastButton.addEventListener(
+    "click",
+    superFast
+);
+
+
+window.addEventListener(
+    "resize",
+    fitScreen
+);
+
+
+/* =====================================================
+   VIDEO RECORDER
+===================================================== */
+
+const videoCanvas =
+    document.createElement(
+        "canvas"
+    );
+
+
+videoCanvas.width = 1920;
+videoCanvas.height = 1080;
+
+
+const videoContext =
+    videoCanvas.getContext(
+        "2d"
+    );
+
+
+let recorder = null;
+
+let recordedChunks = [];
+
+let recording = false;
+
+let recordingFrame = null;
+
+
+/* =====================================================
+   VIDEO MIME TYPE
+===================================================== */
+
+function getMimeType() {
+
+    const types = [
+
+        "video/webm;codecs=vp9",
+
+        "video/webm;codecs=vp8",
+
+        "video/webm"
+
+    ];
+
+
+    for (
+        const type of types
+    ) {
+
+        if (
+            MediaRecorder.isTypeSupported(
+                type
+            )
+        ) {
+
+            return type;
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+/* =====================================================
+   VIDEO FONT FIT
+===================================================== */
+
+function getVideoFontSize(
+    text,
+    max,
+    min
+) {
+
+    let size = max;
+
+
+    while (
+        size > min
+    ) {
+
+        videoContext.font =
+            `300 ${size}px Roboto`;
+
+
+        if (
+
+            videoContext.measureText(
+                text
+            ).width <= 1750
+
+        ) {
+
+            break;
+
+        }
+
+
+        size--;
+
+    }
+
+
+    return size;
+
+}
+
+
+/* =====================================================
+   DRAW VIDEO FRAME
+===================================================== */
+
+function drawVideoFrame() {
+
+    if (!recording) {
+        return;
+    }
+
+
+    const width =
+        videoCanvas.width;
+
+
+    const height =
+        videoCanvas.height;
+
+
+    /* Background */
+
+    videoContext.fillStyle =
+        "#000";
+
+
+    videoContext.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    const number =
+        numberElement.textContent;
+
+
+    const word =
+        wordElement.textContent;
+
+
+    let shakeX = 0;
+    let shakeY = 0;
+
+
+    /* Infinity shake */
+
+    if (infinity) {
+
+        shakeX =
+            (Math.random() - 0.5)
+            * 20;
+
+
+        shakeY =
+            (Math.random() - 0.5)
+            * 14;
+
+    }
+
+
+    videoContext.textAlign =
+        "center";
+
+
+    videoContext.textBaseline =
+        "middle";
+
+
+    /* ================================================
+       NUMBER
+    ================================================ */
+
+    const numberSize =
+        getVideoFontSize(
+            number,
+            170,
+            20
+        );
+
+
+    videoContext.font =
+        `300 ${numberSize}px Roboto`;
+
+
+    /* Glitch */
+
+    if (infinity) {
+
+        videoContext.fillStyle =
+            "#00e5ff";
+
+
+        videoContext.fillText(
+
+            number,
+
+            width / 2 -
+            8 +
+            shakeX,
+
+            height / 2 -
+            80 +
+            shakeY
+
+        );
+
+
+        videoContext.fillStyle =
+            "#ff003c";
+
+
+        videoContext.fillText(
+
+            number,
+
+            width / 2 +
+            8 +
+            shakeX,
+
+            height / 2 -
+            80 +
+            shakeY
+
+        );
+
+    }
+
+
+    /* Main number */
+
+    videoContext.fillStyle =
+        "#fff";
+
+
+    videoContext.fillText(
+
+        number,
+
+        width / 2 +
+        shakeX,
+
+        height / 2 -
+        80 +
+        shakeY
+
+    );
+
+
+    /* ================================================
+       WORD
+    ================================================ */
+
+    let wordSize = 72;
+
+
+    while (
+        wordSize > 15
+    ) {
+
+        videoContext.font =
+            `500 ${wordSize}px Roboto`;
+
+
+        if (
+
+            videoContext.measureText(
+                word
+            ).width <= 1750
+
+        ) {
+
+            break;
+
+        }
+
+
+        wordSize--;
+
+    }
+
+
+    videoContext.font =
+        `500 ${wordSize}px Roboto`;
+
+
+    /* Infinity glitch */
+
+    if (infinity) {
+
+        videoContext.fillStyle =
+            "#00e5ff";
+
+
+        videoContext.fillText(
+
+            word,
+
+            width / 2 -
+            5 +
+            shakeX,
+
+            height / 2 +
+            100 +
+            shakeY
+
+        );
+
+
+        videoContext.fillStyle =
+            "#ff003c";
+
+
+        videoContext.fillText(
+
+            word,
+
+            width / 2 +
+            5 +
+            shakeX,
+
+            height / 2 +
+            100 +
+            shakeY
+
+        );
+
+    }
+
+
+    /* Main word */
+
+    videoContext.fillStyle =
+        "#fff";
+
+
+    videoContext.fillText(
+
+        word,
+
+        width / 2 +
+        shakeX,
+
+        height / 2 +
+        100 +
+        shakeY
+
+    );
+
+
+    recordingFrame =
+        requestAnimationFrame(
+            drawVideoFrame
+        );
+
+}
+
+
+/* =====================================================
+   START RECORDING
+===================================================== */
+
+function startRecording() {
+
+    if (recording) {
+        return;
+    }
+
+
+    const mimeType =
+        getMimeType();
+
+
+    if (!mimeType) {
+
+        alert(
+            "Video recording is not supported in this browser."
+        );
+
+        return;
+
+    }
+
+
+    document.fonts.ready.then(
+        () => {
+
+            const stream =
+
+                videoCanvas.captureStream(
+                    30
+                );
+
+
+            recordedChunks = [];
+
+
+            recorder =
+
+                new MediaRecorder(
+
+                    stream,
+
+                    {
+                        mimeType:
+                            mimeType
+                    }
+
+                );
+
+
+            recorder.ondataavailable =
+                event => {
+
+                    if (
+
+                        event.data &&
+                        event.data.size > 0
+
+                    ) {
+
+                        recordedChunks.push(
+                            event.data
+                        );
+
+                    }
+
+                };
+
+
+            recorder.onstop =
+                autoDownloadVideo;
+
+
+            recording = true;
+
+
+            videoButton.textContent =
+                "Recording...";
+
+
+            statusElement.textContent =
+                "Recording Video";
+
+
+            drawVideoFrame();
+
+
+            recorder.start(
+                250
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   STOP RECORDING
+===================================================== */
+
+function stopRecording() {
+
+    if (
+        !recording ||
+        !recorder
+    ) {
+
+        return;
+
+    }
+
+
+    recording = false;
+
+
+    if (recordingFrame) {
+
+        cancelAnimationFrame(
+            recordingFrame
+        );
+
+        recordingFrame = null;
+
+    }
+
+
+    videoButton.textContent =
+        "Saving Video...";
+
+
+    /*
+       The onstop event automatically
+       calls autoDownloadVideo().
+    */
+
+    recorder.stop();
+
+}
+
+
+/* =====================================================
+   AUTO DOWNLOAD VIDEO
+===================================================== */
+
+function autoDownloadVideo() {
+
+    const blob =
+
+        new Blob(
+
+            recordedChunks,
+
+            {
+                type:
+                    recorder.mimeType ||
+                    "video/webm"
+            }
+
+        );
+
+
+    if (
+        blob.size === 0
+    ) {
+
+        alert(
+            "The recording was empty. Please try again."
+        );
+
+
+        videoButton.textContent =
+            "Record Video";
+
+
+        updateStatus();
+
+
+        return;
+
+    }
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    /*
+       Automatic filename.
+    */
+
+    const date =
+        new Date();
+
+
+    const timestamp =
+
+        date.getFullYear() +
+        "-" +
+
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0") +
+
+        "-" +
+
+        String(
+            date.getDate()
+        ).padStart(2, "0") +
+
+        "-" +
+
+        String(
+            date.getHours()
+        ).padStart(2, "0") +
+
+        "-" +
+
+        String(
+            date.getMinutes()
+        ).padStart(2, "0") +
+
+        "-" +
+
+        String(
+            date.getSeconds()
+        ).padStart(2, "0");
+
+
+    link.download =
+        "Endless-Numbers-" +
+        timestamp +
+        ".webm";
+
+
+    link.style.display =
+        "none";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    /*
+       AUTO DOWNLOAD
+    */
+
+    link.click();
+
+
+    link.remove();
+
+
+    setTimeout(
+        () => {
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        },
+        3000
+    );
+
+
+    videoButton.textContent =
+        "Record Video";
+
+
+    updateStatus();
+
+}
+
+
+/* =====================================================
+   VIDEO BUTTONS
+===================================================== */
+
+videoButton.addEventListener(
+    "click",
+    startRecording
+);
+
+
+stopButton.addEventListener(
+    "click",
+    stopRecording
+);
+
+</script>
+
+</body>
+</html>
